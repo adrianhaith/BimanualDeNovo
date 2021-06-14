@@ -28,7 +28,8 @@ subjnames = {
 %data{1} = loadSubjData([subjname,'/D1'],{'B0'});
 Nsubj = length(subjnames)
 
-path = '../../../Expt1_Data/';
+%path = '../../../Expt1_Data/';
+path = '../Data/'
 %
 for subj = 1:Nsubj%length(subjnames)
     clear data
@@ -86,36 +87,11 @@ for subj = 1:Nsubj%length(subjnames)
     
     % save data
     disp('    Saving...')
-    fname = fullfile(['BimanualSkillData_S',num2str(subj)]);
+    fname = fullfile([path,'BimanualSkillData_S',num2str(subj)]);
     save(fname,'data')
 end
     
 %%
-
-save BimanualSkillData d
+fname = fullfile([path,'BimanualSkillData']);
+save(fname,'d');
 disp('All Done')
-
-%% validate data
-%{
-figure(1); clf; hold on
-subplot(2,2,1); hold on
-for i=1:data{1}.Ntrials
-    plot(data{1}.L{i}(:,1),data{1}.L{i}(:,2))
-    axis equal
-end
-subplot(2,2,2); hold on
-for i=1:data{1}.Ntrials
-    plot(data{1}.R{i}(:,1),data{1}.R{i}(:,2))
-    axis equal
-end
-subplot(2,2,3); hold on
-for i=1:data{1}.Ntrials
-    plot(data{1}.C{i}(:,1),data{1}.C{i}(:,2))
-    axis equal
-end
-subplot(2,2,4); hold on
-for i=1:data{1}.Ntrials
-    plot(data{1}.N{i}(:,1),data{1}.N{i}(:,2))
-    axis equal
-end
-%}
