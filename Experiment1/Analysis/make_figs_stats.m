@@ -1,6 +1,7 @@
 % Bimanual Skill Paper - Make all figures and run all stats
 clear all
 clc
+addpath ../../functions
 load Bimanual_compact
 
 %% Initial performance stats

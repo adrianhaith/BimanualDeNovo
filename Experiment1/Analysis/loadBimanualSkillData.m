@@ -1,4 +1,6 @@
 clear all
+addpath ../../functions
+
 subjnames = {   
     
                 %'200.052',

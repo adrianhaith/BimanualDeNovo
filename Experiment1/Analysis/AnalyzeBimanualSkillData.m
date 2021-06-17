@@ -1,4 +1,5 @@
 clear all
+addpath ../../functions
 load ../../../Expt1_data/BimanualSkillData
 %load BimanualSkillData
 
