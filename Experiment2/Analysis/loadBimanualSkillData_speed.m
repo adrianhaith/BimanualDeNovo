@@ -1,4 +1,5 @@
 clear all
+addpath ../../functions
 subjnames = {'S1','S2','S3','S5','S6','S7','Eli','Jul'};
 addpath ../../Experiment1/Analysis
 %Nblocks = [11 10 10 10 10];

@@ -1,6 +1,6 @@
 clear all
 addpath ../../Experiment1/Analysis
-
+addpath ../../functions
 load BimanualSkillData_speed
 %load BimanualSkillData
 
