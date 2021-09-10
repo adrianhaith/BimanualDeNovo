@@ -3,8 +3,8 @@
 clear all
 
 %load BimanualSkillData
-subjNum = 9;
-fname = fullfile('../../../','Expt1_data',['BimanualSkillData_S',num2str(subjNum)])
+subjNum = 2;
+fname = fullfile('../Data/',['BimanualSkillData_S',num2str(subjNum)])
 load(fname)
 %data = dat;
 
@@ -53,7 +53,7 @@ subplot(1,5,5); hold on
     for i=1:300
         %plot(data.BiInit.Cr{i}(:,1),data.BiInit.Cr{i}(:,2),'b')
         if(clean(i))
-            plot(data.Uni{1}.Cr{i}(:,1),data.Uni{1}.Cr{i}(:,2),'k')
+            plot(data.Uni{2}.Cr{i}(:,1),data.Uni{2}.Cr{i}(:,2),'k')
         end
     end
     axis equal

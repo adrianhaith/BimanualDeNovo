@@ -30,6 +30,7 @@ for blk=1:Nblocks
     fnames = dir(path);
     Ntrials = size(tFile,1);
     for j=1:Ntrials
+        disp([path,'/',fnames(j+2).name]);
         d = dlmread([path,'/',fnames(j+2).name],' ',6,0);
         % uncalibrated
         L{trial} = d(:,1:2); % left hand X

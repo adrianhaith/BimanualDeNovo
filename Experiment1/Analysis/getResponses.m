@@ -10,6 +10,7 @@ function response = getResponses(x,pmax,dt)
 pos = x;
 pos(isnan(pos)) = pmax; % replace nans in position with target location
 response.pos = mean(pos)';
+response.pos_all = pos;
 
 vel = diff(x')'/dt;
 vel(isnan(vel)) = 0; % replace nans in velocity with 0s
@@ -17,6 +18,7 @@ vel(isnan(vel)) = 0; % replace nans in velocity with 0s
 vel = savgolayFilt(vel,3,7);
 
 response.vel = mean(vel)'; % compute smoothed, averaged velocity
+response.vel_all = vel;
 
 response.acc = savgolayFilt(diff(response.vel)'/dt,3,7)';
 
