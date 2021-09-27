@@ -9,13 +9,16 @@ load Bimanual_control_compact
 
 %% Velocity profiles
 % make plots
-col = lines;
-col = col(1:7,:);
+col = [100 220 100
+       255 160 10
+       70 110 255
+       255 110 255
+       160 120 80]./255;
 hands = {'L','R','Bi'};
 size = {'small','large'};
 
 fhandle = figure(1); clf
-set(fhandle,'Position',[250 250 1200 300])
+set(fhandle,'Position',[250 250 400 150])
 set(fhandle,'Color','w')
 
 % small target jump
@@ -25,7 +28,7 @@ plot([0 2000],[0 0],'k')
 for i = 1:length(hands)
     shadedErrorBar(time,mean(dAll.(hands{i}).response_small.vel),seNaN(dAll.(hands{i}).response_small.vel),{'-','color',col(i,:)},1);
 end
-axis([0 2000 -.02 .12])
+axis([0 1000 -.02 .12])
 xlabel('Time post-perturbation')
 ylabel('Cursor velocity parallel to target jump')
 
@@ -35,42 +38,42 @@ plot([0 2000],[0 0],'k')
 for i = 1:length(hands)
     shadedErrorBar(time,mean(dAll.(hands{i}).response_large.vel),seNaN(dAll.(hands{i}).response_large.vel),{'-','color',col(i,:)},1);
 end
-axis([0 2000 -.02 .12])
+axis([0 1000 -.02 .12])
 xlabel('Time post-perturbation')
-ylabel('Cursor velocity parallel to target jump')
+
+print('C:/Users/Chris/Documents/Papers/bimanual/velocity','-dpdf','-painters')
 
 %% peak velocity/latency
 fhandle = figure(2); clf; 
-set(fhandle,'Position',[250 250 600 500])
+set(fhandle,'Position',[250 250 350 350])
 set(fhandle,'Color','w')
 
 dt = 1000/130; % ms per timestep
 
 subplot(2,2,1); hold on
 for i = 1:3
-    plot(1+(0.5*i),mean(dt*dAll.(hands{i}).peakResponse_small),'.','Color',col(i,:),'MarkerSize',30)
-    plot(3.5+(0.5*i),mean(dt*dAll.(hands{i}).peakResponse_large),'.','Color',col(i,:),'MarkerSize',30,'HandleVisibility','off')
-
-    plot(1+(0.5*i),dt*dAll.(hands{i}).peakResponse_small,'.','Color',col(i,:),'MarkerSize',10,'HandleVisibility','off')
-    plot(3.5+(0.5*i),dt*dAll.(hands{i}).peakResponse_large,'.','Color',col(i,:),'MarkerSize',10,'HandleVisibility','off')
+    plot(1+(0.5*i),dAll.(hands{i}).peakResponse_small,'.','Color',col(i,:),'MarkerSize',12,'HandleVisibility','off')
+    plot(3.5+(0.5*i),dAll.(hands{i}).peakResponse_large,'.','Color',col(i,:),'MarkerSize',12,'HandleVisibility','off')
+    plot(1+(0.5*i),mean(dAll.(hands{i}).peakResponse_small),'ok','MarkerFaceColor',col(i,:),'MarkerSize',6)
+    plot(3.5+(0.5*i),mean(dAll.(hands{i}).peakResponse_large),'ok','MarkerFaceColor',col(i,:),'MarkerSize',6,'HandleVisibility','off')
 end
-xlim([1 5.5])
+axis([1 5.5 0.025 0.15])
 xticks([2 4.5])
 xticklabels({'1.5 cm','3 cm'})
 xlabel('Jump size')
+yticks(0:0.05:0.15)
 ylabel('Peak velocity (m/s)')
-legend({'Left','Right','Bimanual'},'Location','Northwest')
-legend box off
+% legend({'Left','Right','Bimanual'},'Location','Northwest')
+% legend box off
 
 subplot(2,2,2); hold on
 for i = 1:3
-    plot(1+(0.5*i),mean(dt*dAll.(hands{i}).peakResponse_lat_small),'.','Color',col(i,:),'MarkerSize',30)
-    plot(3.5+(0.5*i),mean(dt*dAll.(hands{i}).peakResponse_lat_large),'.','Color',col(i,:),'MarkerSize',30,'HandleVisibility','off')
-
-    plot(1+(0.5*i),dt*dAll.(hands{i}).peakResponse_lat_small,'.','Color',col(i,:),'MarkerSize',10,'HandleVisibility','off')
-    plot(3.5+(0.5*i),dt*dAll.(hands{i}).peakResponse_lat_large,'.','Color',col(i,:),'MarkerSize',10,'HandleVisibility','off')
+    plot(1+(0.5*i),dt*dAll.(hands{i}).peakResponse_lat_small,'.','Color',col(i,:),'MarkerSize',12,'HandleVisibility','off')
+    plot(3.5+(0.5*i),dt*dAll.(hands{i}).peakResponse_lat_large,'.','Color',col(i,:),'MarkerSize',12,'HandleVisibility','off')
+    plot(1+(0.5*i),mean(dt*dAll.(hands{i}).peakResponse_lat_small),'ok','MarkerFaceColor',col(i,:),'MarkerSize',6)
+    plot(3.5+(0.5*i),mean(dt*dAll.(hands{i}).peakResponse_lat_large),'ok','MarkerFaceColor',col(i,:),'MarkerSize',6,'HandleVisibility','off')
 end
-xlim([1 5.5])
+axis([1 5.5 350 650])
 xticks([2 4.5])
 xticklabels({'1.5 cm','3 cm'})
 xlabel('Jump size')
@@ -82,40 +85,43 @@ exp3.latency.large = dt*(dAll.Bi.peakResponse_lat_large - dAll.R.peakResponse_la
 exp2.latency.small = dt*(dAll_speed.Bi.peakResponse_lat_small(:,end)' - dAll_speed.Uni.peakResponse_lat_small);
 exp3.latency.small = dt*(dAll.Bi.peakResponse_lat_small - dAll.R.peakResponse_lat_small);
 
-exp2.velocity.large = dt*(dAll_speed.Uni.peakResponse_large - dAll_speed.Bi.peakResponse_large(:,end)');
-exp3.velocity.large = dt*(dAll.R.peakResponse_large - dAll.Bi.peakResponse_large);
-exp2.velocity.small = dt*(dAll_speed.Uni.peakResponse_small - dAll_speed.Bi.peakResponse_small(:,end)');
-exp3.velocity.small = dt*(dAll.R.peakResponse_small - dAll.Bi.peakResponse_small);
+exp2.velocity.large = dAll_speed.Uni.peakResponse_large - dAll_speed.Bi.peakResponse_large(:,end)';
+exp3.velocity.large = dAll.R.peakResponse_large - dAll.Bi.peakResponse_large;
+exp2.velocity.small = dAll_speed.Uni.peakResponse_small - dAll_speed.Bi.peakResponse_small(:,end)';
+exp3.velocity.small = dAll.R.peakResponse_small - dAll.Bi.peakResponse_small;
 
 subplot(2,2,3); hold on
 plot([0 5],[0 0],'k','HandleVisibility','off')
 for i = 1:length(size)
-    plot((i-1)*2 + 1,mean(exp2.velocity.(size{i})),'.','Color',col(4,:),'MarkerSize',30)
-    plot((i-1)*2 + 1.5,mean(exp3.velocity.(size{i})),'.','Color',col(5,:),'MarkerSize',30)
-    plot((i-1)*2 + 1,exp2.velocity.(size{i}),'.','Color',col(4,:),'MarkerSize',10)
-    plot((i-1)*2 + 1.5,exp3.velocity.(size{i}),'.','Color',col(5,:),'MarkerSize',10)
+    plot((i-1)*2 + 1,exp2.velocity.(size{i}),'.','Color',col(4,:),'MarkerSize',12,'HandleVisibility','off')
+    plot((i-1)*2 + 1.5,exp3.velocity.(size{i}),'.','Color',col(5,:),'MarkerSize',12,'HandleVisibility','off')
+    plot((i-1)*2 + 1,mean(exp2.velocity.(size{i})),'ok','MarkerFaceColor',col(4,:),'MarkerSize',6)
+    plot((i-1)*2 + 1.5,mean(exp3.velocity.(size{i})),'ok','MarkerFaceColor',col(5,:),'MarkerSize',6)
 end
-xlim([0.5 4])
+axis([0.5 4 -0.02 0.05])
 xticks([1.25 3.25])
 xticklabels({'1.5 cm','3 cm'})
 xlabel('Jump size')
-ylabel('Difference in latency (bim - right)')
-legend({'Exp 2','Exp 3'},'location','northwest')
-legend box off
+% yticks(0:0.2:0.4)
+ylabel('Difference in velocity (right - bim)')
+% legend({'Exp 2','Exp 3'},'location','northwest')
+% legend box off
 
 subplot(2,2,4); hold on
 plot([0 5],[0 0],'k','HandleVisibility','off')
 for i = 1:length(size)
-    plot((i-1)*2 + 1,mean(exp2.latency.(size{i})),'.','Color',col(4,:),'MarkerSize',30)
-    plot((i-1)*2 + 1.5,mean(exp3.latency.(size{i})),'.','Color',col(5,:),'MarkerSize',30)
-    plot((i-1)*2 + 1,exp2.latency.(size{i}),'.','Color',col(4,:),'MarkerSize',10)
-    plot((i-1)*2 + 1.5,exp3.latency.(size{i}),'.','Color',col(5,:),'MarkerSize',10)
+    plot((i-1)*2 + 1,exp2.latency.(size{i}),'.k','Color',col(4,:),'MarkerSize',12,'HandleVisibility','off')
+    plot((i-1)*2 + 1.5,exp3.latency.(size{i}),'.k','Color',col(5,:),'MarkerSize',12,'HandleVisibility','off')
+    plot((i-1)*2 + 1,mean(exp2.latency.(size{i})),'ok','MarkerFaceColor',col(4,:),'MarkerSize',6)
+    plot((i-1)*2 + 1.5,mean(exp3.latency.(size{i})),'ok','MarkerFaceColor',col(5,:),'MarkerSize',6)
 end
-xlim([0.5 4])
+axis([0.5 4 -50 250])
 xticks([1.25 3.25])
 xticklabels({'1.5 cm','3 cm'})
 xlabel('Jump size')
-ylabel('Difference in velocity (right - bim)')
+ylabel('Difference in latency (bim - right)')
+
+print('C:/Users/Chris/Documents/Papers/bimanual/comparisons','-dpdf','-painters')
 
 %% statistics
 

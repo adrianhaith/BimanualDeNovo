@@ -87,21 +87,25 @@ save Bimanual_init_fits t_init fit
 
 %% plot results
 
-col = [1 0 0
-       0 1 0
-       0 0 1];
-figure(3); clf; hold on
+col = [100 220 100
+       255 160 10
+       70 110 255]./255;
+
+f = figure(3); clf; hold on
+set(f,'Position',[200 200 200 140]);
 for j = 1:length(jumpSize)
     for i = 1:length(hands)
-        plot(4*(j-1)+i,mean(t_init.(jumpSize{j}).(hands{i}),'omitnan'),'.','Color',col(i,:),'MarkerSize',30)
-        plot(4*(j-1)+i,t_init.(jumpSize{j}).(hands{i}),'.','Color',col(i,:),'MarkerSize',10,'HandleVisibility','off')
+        plot(2*(j-1)+0.5*i,t_init.(jumpSize{j}).(hands{i}),'.','Color',col(i,:),'MarkerSize',12,'HandleVisibility','off')
+        plot(2*(j-1)+0.5*i,mean(t_init.(jumpSize{j}).(hands{i}),'omitnan'),'ok','MarkerFaceColor',col(i,:),'MarkerSize',6)
     end
 end
-% axis([0.5 7.5 100 400])
-xticks([2 6])
+axis([0 4 100 350])
+xticks([1 3])
 xticklabels({'Small','Large'})
 ylabel('Initiation time (ms)')
-legend({'Left','Right','Bi'})
+% legend({'Left','Right','Bi'},'location','southeast')
+
+print('C:/Users/Chris/Documents/Papers/bimanual/initation','-dpdf','-painters')
 
 %% compare fits for unimanual and last bimanual block
 %
