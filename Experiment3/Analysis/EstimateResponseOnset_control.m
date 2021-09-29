@@ -12,7 +12,7 @@ init_pos_thr = 0.05; % initial position threshold.
 dt = 1/130;
 
 jumpSize = {'small','large'};
-hands = {'L','R','Bi'};
+hands = {'L','Bi','R'};
 
 for j = 1:2
     for i = 1:length(hands)
@@ -88,21 +88,23 @@ save Bimanual_init_fits t_init fit
 %% plot results
 
 col = [100 220 100
-       255 160 10
-       70 110 255]./255;
+       70 110 255
+       255 160 10]./255;
 
 f = figure(3); clf; hold on
-set(f,'Position',[200 200 200 140]);
+set(f,'Position',[200 200 200 150]);
 for j = 1:length(jumpSize)
     for i = 1:length(hands)
         plot(2*(j-1)+0.5*i,t_init.(jumpSize{j}).(hands{i}),'.','Color',col(i,:),'MarkerSize',12,'HandleVisibility','off')
         plot(2*(j-1)+0.5*i,mean(t_init.(jumpSize{j}).(hands{i}),'omitnan'),'ok','MarkerFaceColor',col(i,:),'MarkerSize',6)
     end
 end
-axis([0 4 100 350])
+axis([0 4 100 320])
 xticks([1 3])
-xticklabels({'Small','Large'})
+xticklabels([1.5 3])
+xlabel('Jump size (cm)')
 ylabel('Initiation time (ms)')
+yticks(100:100:300)
 % legend({'Left','Right','Bi'},'location','southeast')
 
 print('C:/Users/Chris/Documents/Papers/bimanual/initation','-dpdf','-painters')
